@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sell Out</string>
+    <string name="facebook_app_id">600159171198946</string>
+    <string name="fb_login_protocol_scheme">fb600159171198946</string>
+</resources>

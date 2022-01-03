@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "366057198439",
+    "project_id": "sellout-team",
+    "storage_bucket": "sellout-team.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366057198439:android:d2fa2ee1cbe92b717615c2",
+        "android_client_info": {
+          "package_name": "com.sainentreprises.selloutteam.sellout_team"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366057198439-a7fprb7hd60k9i6c97kj6i9kfheo1q2l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-cSNqqDUGwj0T5stJQJIKzNYtaEVFwvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366057198439-a7fprb7hd60k9i6c97kj6i9kfheo1q2l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
