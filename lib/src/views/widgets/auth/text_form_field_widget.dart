@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:sellout_team/src/views/components/components.dart';
 
 class TextFormFieldWidget extends StatelessWidget {
-  late final TextEditingController controller;
+  const TextFormFieldWidget({
+    Key? key,
+    required this.controller,
+    this.suffixIcon,
+    this.isPassword = false,
+  }) : super(key: key);
+  final TextEditingController controller;
   final bool isPassword;
   final Widget? suffixIcon;
 
-  TextFormFieldWidget(
-      {required this.controller, this.suffixIcon, this.isPassword = false});
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final double _width = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: (_width > 300) ? 350 : _width,
       child: TextFormField(
         obscureText: isPassword,
         style: Components.kBodyOne(context)
@@ -27,8 +33,9 @@ class TextFormFieldWidget extends StatelessWidget {
           fillColor: Colors.grey.withOpacity(0.2),
           filled: true,
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none),
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
           suffixIcon: suffixIcon,
         ),
       ),

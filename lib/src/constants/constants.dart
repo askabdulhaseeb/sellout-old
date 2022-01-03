@@ -23,6 +23,7 @@ UserModel? kUserModel;
 UserInfoModel? kUserInfoModel;
 
 String K_LOGO = 'assets/images/sellout_logo/sellout.png';
+String K_ICON = 'assets/images/sellout_logo/sellout_logo.png';
 
 //String K_SPLASH_LOGO = 'assets/images/logo.png';
 

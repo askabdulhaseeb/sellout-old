@@ -7,12 +7,12 @@ import 'package:sellout_team/src/views/auth/forgotpassword_screen.dart';
 import 'package:sellout_team/src/views/auth/register_screen.dart';
 import 'package:sellout_team/src/views/components/components.dart';
 import 'package:sellout_team/src/views/widgets/auth/auth_text.dart';
-import 'package:sellout_team/src/views/widgets/auth/elevated_container.dart';
 import 'package:sellout_team/src/views/widgets/auth/field_label.dart';
 import 'package:sellout_team/src/views/widgets/auth/social_media_login_button.dart';
 import 'package:sellout_team/src/views/widgets/circular_indicator/circular_indicator.dart';
 import 'package:sellout_team/src/views/widgets/auth/default_button_widget.dart';
 import 'package:sellout_team/src/views/widgets/auth/text_form_field_widget.dart';
+import 'package:sellout_team/src/views/widgets/indicator/show_loading.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginComponents {
@@ -20,7 +20,7 @@ class LoginComponents {
   static Widget logo(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
-      child: Image.asset(K_LOGO, width: 100, height: 100),
+      child: Image.asset(K_ICON, width: 120, height: 120),
     );
   }
   // the login card.
@@ -35,74 +35,68 @@ class LoginComponents {
   }) {
     return Form(
       key: formKey,
-      child: ElevatedContainer(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              FieldLabel(
-                text: 'Email address',
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FieldLabel(
+              text: ' Email address',
+            ),
+            TextFormFieldWidget(
+              controller: emailController,
+              suffixIcon: const Icon(Icons.email),
+            ),
+            const SizedBox(height: 8),
+            FieldLabel(text: ' Password'),
+            TextFormFieldWidget(
+              controller: passwordController,
+              isPassword: cubit.isObsecure,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  cubit.onChanged();
+                },
+                icon: Icon(
+                  cubit.isObsecure
+                      ? Icons.remove_red_eye
+                      : Icons.visibility_off,
+                  size: 20,
+                  color: Colors.grey.withOpacity(0.8),
+                ),
               ),
-              TextFormFieldWidget(
-                controller: emailController,
-                suffixIcon: const Icon(Icons.email, size: 20),
-              ),
-              const SizedBox(height: 2),
-              FieldLabel(text: 'Password'),
-              SizedBox(
-                height: Components.kHeight(context) * 0.05,
-                child: TextFormFieldWidget(
-                  controller: passwordController,
-                  isPassword: cubit.isObsecure,
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      cubit.onChanged();
+            ),
+            Components.kDivider,
+            state is AuthLoginLoadingState
+                ? CircularIndicator()
+                : DefaultButtonWidget(
+                    text: 'Log in',
+                    isTextWeightThick: false,
+                    isSmallerHeight: true,
+                    function: () {
+                      if (formKey.currentState!.validate()) {
+                        cubit.login(
+                          email: emailController.text,
+                          passwords: passwordController.text,
+                        );
+                      }
                     },
-                    icon: Icon(
-                      cubit.isObsecure
-                          ? Icons.remove_red_eye
-                          : Icons.visibility_off,
-                      size: 20,
-                      color: Colors.grey.withOpacity(0.8),
-                    ),
+                    color: kPrimaryColor,
                   ),
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: () => Components.navigateTo(context, ForgotPassword()),
+              child: const Text(
+                "Forgot Password?",
+                style: TextStyle(
+                  shadows: [Shadow(color: Colors.black, offset: Offset(0, -1))],
+                  color: Colors.transparent,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Colors.black,
                 ),
               ),
-              const SizedBox(height: 2),
-              state is AuthLoginLoadingState
-                  ? CircularIndicator()
-                  : DefaultButtonWidget(
-                      text: 'Log in',
-                      isTextWeightThick: false,
-                      isSmallerHeight: true,
-                      function: () {
-                        if (formKey.currentState!.validate()) {
-                          cubit.login(
-                              email: emailController.text,
-                              passwords: passwordController.text);
-                        }
-                      },
-                      color: kPrimaryColor,
-                    ),
-              const SizedBox(height: 4),
-              InkWell(
-                onTap: () => Components.navigateTo(context, ForgotPassword()),
-                child: const Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                    shadows: [
-                      Shadow(color: Colors.black, offset: Offset(0, -1))
-                    ],
-                    color: Colors.transparent,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -113,21 +107,23 @@ class LoginComponents {
   static Widget buttonsSection(
       BuildContext context, AuthCubit cubit, AuthStates state) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        //Text('or'.toUpperCase(), style: Components.kBodyOne(context)),
+        Components.kDivider,
+        Text('or'.toUpperCase(), style: Components.kBodyOne(context)),
         Components.kDivider,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             InkWell(
               onTap: () {
+                showLoadingDislog(context);
                 cubit.loginWithFacebook();
               },
-              child: SocialMediaLoginButton(
+              child: const SocialMediaLoginButton(
                 text: 'Facebook',
-                icon: const Icon(
+                icon: Icon(
                   FontAwesomeIcons.facebookF,
                   color: Colors.blue,
                 ),
@@ -135,11 +131,12 @@ class LoginComponents {
             ),
             InkWell(
               onTap: () {
+                showLoadingDislog(context);
                 cubit.signInWithApple();
               },
-              child: SocialMediaLoginButton(
+              child: const SocialMediaLoginButton(
                 text: 'Apple',
-                icon: const Icon(
+                icon: Icon(
                   FontAwesomeIcons.apple,
                   color: Colors.black,
                 ),
@@ -147,11 +144,12 @@ class LoginComponents {
             ),
             InkWell(
               onTap: () {
+                showLoadingDislog(context);
                 cubit.loginWithGoogle();
               },
-              child: SocialMediaLoginButton(
+              child: const SocialMediaLoginButton(
                 text: 'Google',
-                icon: const Icon(
+                icon: Icon(
                   FontAwesomeIcons.google,
                   color: Colors.red,
                 ),
@@ -159,7 +157,7 @@ class LoginComponents {
             ),
           ],
         ),
-        Components.kDivider,
+        const Spacer(),
         AuthText(
           sentence: 'Don\'t have an account? ',
           text: 'Register.',
@@ -167,24 +165,25 @@ class LoginComponents {
             Components.navigateTo(context, Register());
           },
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        GestureDetector(
-          onTap: () {
-            String url =
-                "https://app.termly.io/document/terms-of-use-for-ios-app/0ba486f6-86c7-48c7-a116-f8c5aa4017cc";
-            _launchURL(url);
-          },
-          child: const Text(
-            'By registrating you accept Customer Agreement conditions and Privacy Policy and accept all risks inherent',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              decoration: TextDecoration.underline,
-            ),
-          ),
-        )
+        const SizedBox(height: 6),
+        // const SizedBox(
+        //   height: 10,
+        // ),
+        // GestureDetector(
+        //   onTap: () {
+        //     String url =
+        //         "https://app.termly.io/document/terms-of-use-for-ios-app/0ba486f6-86c7-48c7-a116-f8c5aa4017cc";
+        //     _launchURL(url);
+        //   },
+        //   child: const Text(
+        //     'By registrating you accept Customer Agreement conditions and Privacy Policy and accept all risks inherent',
+        //     textAlign: TextAlign.center,
+        //     style: TextStyle(
+        //       fontSize: 12,
+        //       decoration: TextDecoration.underline,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
