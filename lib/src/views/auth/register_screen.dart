@@ -9,6 +9,8 @@ import 'package:sellout_team/src/views/components/components.dart';
 
 class Register extends StatelessWidget {
   final nameController = TextEditingController();
+  final dobController = TextEditingController();
+  final genderController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
@@ -25,11 +27,11 @@ class Register extends StatelessWidget {
           Components.kSnackBar(context, state.error);
         }
         if (state is AuthRegisterSuccessState) {
-          Components.navigateAndRemoveUntil(context, Login());
+          Components.navigateAndRemoveUntil(context, const Login());
         }
         if (state is AuthRegisterVerificationSentState) {
           Components.kSnackBar(context, 'please verifiy your account');
-          Components.navigateAndRemoveUntil(context, Login());
+          Components.navigateAndRemoveUntil(context, const Login());
         }
         if (state is AuthLoginWithGoogleErrorState) {
           print(state.error);
@@ -37,7 +39,7 @@ class Register extends StatelessWidget {
         }
         if (state is AuthLoginWithGoogleSuccessState) {
           CacheHelper.setString(key: 'uid', value: state.uid).then((value) {
-            Components.navigateAndRemoveUntil(context, Login());
+            Components.navigateAndRemoveUntil(context, const Login());
           });
         }
         if (state is AuthLoginWithFacebookErrorState) {
@@ -54,45 +56,41 @@ class Register extends StatelessWidget {
         var cubit = AuthCubit.get(context);
         return Scaffold(
           body: Center(
-            child: SingleChildScrollView(
-              child: SizedBox(
-                height: Components.kHeight(context),
-                width: Components.kWidth(context) * 0.9,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: SizedBox(
-                          height: Components.kHeight(context) * 0.2,
-                          child: RegisterComponents.logoSection(context),
-                        ),
-                      ),
-                      SizedBox(
-                        height: Components.kHeight(context) * 0.52,
-                        child: RegisterComponents.registerSection(
-                          context: context,
-                          cubit: cubit,
-                          formKey: formKey,
-                          emailController: emailController,
-                          nameController: nameController,
-                          passwordController: passwordController,
-                          usernameController: usernameController,
-                          phoneController: phoneController,
-                          state: state,
-                        ),
-                      ),
-                      SizedBox(
-                        height: Components.kHeight(context) * 0.2,
-                        child: RegisterComponents.lastSection(
-                          context: context,
-                          cubit: cubit,
-                          state: state,
-                        ),
-                      )
-                    ],
+            child: SizedBox(
+              height: Components.kHeight(context),
+              // width: Components.kWidth(context) * 0.9,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: RegisterComponents.logoSection(context),
                   ),
-                ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: RegisterComponents.registerSection(
+                        context: context,
+                        cubit: cubit,
+                        formKey: formKey,
+                        emailController: emailController,
+                        dobController: dobController,
+                        genderController: genderController,
+                        nameController: nameController,
+                        passwordController: passwordController,
+                        usernameController: usernameController,
+                        phoneController: phoneController,
+                        state: state,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: RegisterComponents.lastSection(
+                      context: context,
+                      cubit: cubit,
+                      state: state,
+                    ),
+                  )
+                ],
               ),
             ),
           ),

@@ -17,9 +17,9 @@ class RegisterComponents {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Image.asset(
-        'assets/images/sellout_logo/sellout.png',
-        width: 100,
-        height: 100,
+        'assets/images/sellout_logo/sellout_logo.png',
+        width: 120,
+        height: 120,
       ),
     );
   }
@@ -31,6 +31,8 @@ class RegisterComponents {
     required formKey,
     required TextEditingController nameController,
     required TextEditingController emailController,
+    required TextEditingController dobController,
+    required TextEditingController genderController,
     required TextEditingController passwordController,
     required TextEditingController usernameController,
     required TextEditingController phoneController,
@@ -39,46 +41,38 @@ class RegisterComponents {
       key: formKey,
       child: ElevatedContainer(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 40, 10, 10),
+          padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FieldLabel(text: 'Name'),
-                const SizedBox(
-                  height: 6,
-                ),
-                TextFormFieldWidget(
-                  controller: nameController,
-                ),
-                const SizedBox(
-                  height: 6,
-                ),
+                const SizedBox(height: 6),
+                TextFormFieldWidget(controller: nameController),
+                const SizedBox(height: 6),
                 FieldLabel(text: 'Username'),
-                const SizedBox(
-                  height: 6,
-                ),
-                TextFormFieldWidget(
-                  controller: usernameController,
-                ),
-                const SizedBox(
-                  height: 6,
-                ),
+                const SizedBox(height: 6),
+                TextFormFieldWidget(controller: usernameController),
+                const SizedBox(height: 6),
+                FieldLabel(text: 'Date of Birth'),
+                const SizedBox(height: 6),
+                TextFormFieldWidget(controller: dobController),
+                const SizedBox(height: 6),
+                FieldLabel(text: 'Gender'),
+                const SizedBox(height: 6),
+                TextFormFieldWidget(controller: genderController),
+                const SizedBox(height: 6),
+                FieldLabel(text: 'Mobile Number'),
+                const SizedBox(height: 6),
+                TextFormFieldWidget(controller: phoneController),
+                const SizedBox(height: 6),
                 FieldLabel(text: 'Email address'),
-                const SizedBox(
-                  height: 6,
-                ),
-                TextFormFieldWidget(
-                  controller: emailController,
-                ),
-                const SizedBox(
-                  height: 6,
-                ),
+                const SizedBox(height: 6),
+                TextFormFieldWidget(controller: emailController),
+                const SizedBox(height: 6),
                 FieldLabel(text: 'Password'),
-                const SizedBox(
-                  height: 6,
-                ),
-                Container(
+                const SizedBox(height: 6),
+                SizedBox(
                   height: Components.kHeight(context) * 0.05,
                   child: TextFormFieldWidget(
                     controller: passwordController,
@@ -96,22 +90,7 @@ class RegisterComponents {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 6,
-                ),
-                FieldLabel(text: 'Phone Number'),
-                const SizedBox(
-                  height: 6,
-                ),
-                TextFormFieldWidget(
-                  controller: phoneController,
-                ),
-                const SizedBox(
-                  height: 6,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 state is AuthRegisterLoadingState
                     ? CircularIndicator()
                     : DefaultButtonWidget(
@@ -121,13 +100,14 @@ class RegisterComponents {
                         function: () {
                           if (formKey.currentState!.validate()) {
                             cubit.register(
-                                name: nameController.text,
-                                username: usernameController.text,
-                                phoneNumber: phoneController.text,
-                                email: emailController.text,
-                                passwords: passwordController.text,
-                                type: "form",
-                                userImg: "");
+                              name: nameController.text,
+                              username: usernameController.text,
+                              phoneNumber: phoneController.text,
+                              email: emailController.text,
+                              passwords: passwordController.text,
+                              type: "form",
+                              userImg: "",
+                            );
                           }
                         },
                         color: kPrimaryColor),
@@ -149,12 +129,13 @@ class RegisterComponents {
       required AuthStates state}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         AuthText(
             sentence: 'Already have a user?',
             text: 'Sign in',
             function: () {
-              Components.navigateTo(context, Login());
+              Components.navigateTo(context, const Login());
             }),
         Components.kDivider,
         GestureDetector(
@@ -163,12 +144,12 @@ class RegisterComponents {
                 "https://app.termly.io/document/terms-of-use-for-ios-app/0ba486f6-86c7-48c7-a116-f8c5aa4017cc";
             _launchURL(url);
           },
-          child: Text(
+          child: const Text(
               'By registrating you accept Customer Agreement conditions and Privacy Policy and accept all risks inherent',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                decoration: TextDecoration.underline,
+                // decoration: TextDecoration.underline,
               )),
         )
       ],
