@@ -6,6 +6,7 @@ import 'package:sellout_team/src/views/components/components.dart';
 import 'package:sellout_team/src/views/widgets/auth/default_button_widget.dart';
 
 class Splash extends StatelessWidget {
+  const Splash({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,21 +23,17 @@ class Splash extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 80),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 300),
               DefaultButtonWidget(
                 text: 'Log in',
                 color: Colors.white,
                 function: () {
-                  Components.navigateAndRemoveUntil(context, Login());
+                  Components.navigateAndRemoveUntil(context, const Login());
                 },
               ),
-              const SizedBox(
-                height: 12,
-              ),
+              const SizedBox(height: 12),
               DefaultButtonWidget(
                 text: 'Register',
                 color: kPrimaryColor,
